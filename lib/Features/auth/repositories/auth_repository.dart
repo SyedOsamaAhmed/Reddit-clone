@@ -33,6 +33,8 @@ class AuthRepository {
   CollectionReference get _users =>
       _fireStore.collection(FirebaseConstants.usersCollection);
 
+  Stream<User?> get authStateChange => _firebaseAuth.authStateChanges();
+
   FutureEither<UserModel> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();

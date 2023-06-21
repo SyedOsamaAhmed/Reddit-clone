@@ -10,7 +10,7 @@ class Home extends ConsumerWidget {
     final user = ref.watch(userProvider)!;
     return Scaffold(
       body: Center(
-        child: Text(user.name),
+        child: Text(user.karma.toString()),
       ),
     );
   }

@@ -56,7 +56,7 @@ class LoginScreen extends ConsumerWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Image.asset(
                         Constants.logoemotePath,
-                        height: 400,
+                        height: 350,
                       ),
                     ),
                     const SignInButton(),

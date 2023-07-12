@@ -7,7 +7,7 @@ import 'package:reddit_clone/Theme/pallete.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:reddit_clone/common/error_text.dart';
 import 'package:reddit_clone/common/loader.dart';
-import 'package:reddit_clone/models/user.dart';
+import 'package:reddit_clone/models/user_model.dart';
 import 'package:reddit_clone/router.dart';
 import 'package:routemaster/routemaster.dart';
 import 'firebase_options.dart';

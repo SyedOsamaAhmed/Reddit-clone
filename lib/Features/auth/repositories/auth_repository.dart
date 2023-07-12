@@ -7,7 +7,7 @@ import 'package:reddit_clone/core/constants.dart';
 import 'package:reddit_clone/core/firebase_constants.dart';
 import 'package:reddit_clone/core/providers/firebase_providers.dart';
 import 'package:reddit_clone/failure.dart';
-import 'package:reddit_clone/models/user.dart';
+import 'package:reddit_clone/models/user_model.dart';
 
 import '../../../typedefs.dart';
 

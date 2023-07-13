@@ -27,7 +27,6 @@ class CommunityListDrawer extends ConsumerWidget {
           ),
           ref.watch(userCommunityProvider).when(
                 data: (communities) {
-                  print(communities);
                   return Expanded(
                     child: ListView.builder(
                       itemCount: communities.length,

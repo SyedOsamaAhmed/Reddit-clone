@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 
 class Community {
@@ -59,11 +56,6 @@ class Community {
       mods: List<String>.from((map['mods'] as List<String>)),
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory Community.fromJson(String source) =>
-      Community.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:reddit_clone/common/error_text.dart';
 import 'package:reddit_clone/common/loader.dart';
+import 'package:reddit_clone/models/community.dart';
 import 'package:routemaster/routemaster.dart';
 
 import '../../Features/community/controller/community_controller.dart';
@@ -12,6 +13,10 @@ class CommunityListDrawer extends ConsumerWidget {
 
   void navigateToCreateCommunity(BuildContext context) {
     Routemaster.of(context).push('/create-community');
+  }
+
+  void navigateToCommunity(BuildContext context, Community community) {
+    Routemaster.of(context).push('/r/${community.name}');
   }
 
   @override
@@ -33,7 +38,7 @@ class CommunityListDrawer extends ConsumerWidget {
                       itemBuilder: (context, index) {
                         final community = communities[index];
                         return ListTile(
-                          onTap: () {},
+                          onTap: () => navigateToCommunity(context, community),
                           leading: CircleAvatar(
                             backgroundImage: NetworkImage(community.avatar),
                           ),

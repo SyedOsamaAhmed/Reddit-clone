@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:reddit_clone/Features/auth/controllers/auth_controller.dart';
-import 'package:reddit_clone/Theme/pallete.dart';
+import 'package:reddit_clone/theme/pallete.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:reddit_clone/common/error_text.dart';
 import 'package:reddit_clone/common/loader.dart';

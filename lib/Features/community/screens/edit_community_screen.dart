@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,7 +7,10 @@ import 'package:reddit_clone/Features/community/controller/community_controller.
 import 'package:reddit_clone/common/error_text.dart';
 import 'package:reddit_clone/common/loader.dart';
 import 'package:reddit_clone/core/constants.dart';
+import 'package:reddit_clone/core/utils.dart';
 import 'package:reddit_clone/theme/pallete.dart';
+
+import '../../../models/community.dart';
 
 class EditCommunity extends ConsumerStatefulWidget {
   final String name;
@@ -16,6 +21,36 @@ class EditCommunity extends ConsumerStatefulWidget {
 }
 
 class _EditCommunityState extends ConsumerState<EditCommunity> {
+  File? bannerFile;
+  File? profileFile;
+
+  void selectBannerImage() async {
+    final res = await pickImage();
+    if (res != null) {
+      setState(() {
+        bannerFile = File(res.files.first.path!);
+      });
+    }
+  }
+
+  void selectProfileImage() async {
+    final res = await pickImage();
+    if (res != null) {
+      setState(() {
+        profileFile = File(res.files.first.path!);
+      });
+    }
+  }
+
+  void save(Community community) {
+    ref.read(communityControllerProvider.notifier).editCommunity(
+          community: community,
+          profileFile: profileFile,
+          bannerFile: bannerFile,
+          context: context,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ref.watch(getCommunityNameProvider(widget.name)).when(
@@ -25,7 +60,7 @@ class _EditCommunityState extends ConsumerState<EditCommunity> {
                 title: const Text('Edit Community'),
                 actions: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () => save(community),
                     child: const Text('Save'),
                   ),
                 ],
@@ -38,37 +73,54 @@ class _EditCommunityState extends ConsumerState<EditCommunity> {
                       height: 200,
                       child: Stack(
                         children: [
-                          DottedBorder(
-                            borderType: BorderType.RRect,
-                            radius: const Radius.circular(10),
-                            strokeCap: StrokeCap.round,
-                            dashPattern: const [10, 4],
-                            color: Pallete
-                                .darkModeAppTheme.textTheme.bodyLarge!.color!,
-                            child: Container(
-                              width: double.infinity,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
+                          GestureDetector(
+                            onTap: selectBannerImage,
+                            child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              radius: const Radius.circular(10),
+                              strokeCap: StrokeCap.round,
+                              dashPattern: const [10, 4],
+                              color: Pallete
+                                  .darkModeAppTheme.textTheme.bodyLarge!.color!,
+                              child: Container(
+                                width: double.infinity,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: bannerFile != null
+                                    ? Image.file(bannerFile!)
+                                    : community.banner.isEmpty ||
+                                            community.banner ==
+                                                Constants.bannerDefault
+                                        ? const Center(
+                                            child: Icon(
+                                              Icons.camera_alt_outlined,
+                                              size: 40,
+                                            ),
+                                          )
+                                        : Image.network(
+                                            community.banner,
+                                            fit: BoxFit.cover,
+                                          ),
                               ),
-                              child: community.banner.isEmpty ||
-                                      community.banner ==
-                                          Constants.bannerDefault
-                                  ? const Center(
-                                      child: Icon(
-                                        Icons.camera_alt_outlined,
-                                        size: 40,
-                                      ),
-                                    )
-                                  : Image.network(community.banner),
                             ),
                           ),
                           Positioned(
                             bottom: 20,
                             left: 20,
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(community.avatar),
-                              radius: 24,
+                            child: GestureDetector(
+                              onTap: selectProfileImage,
+                              child: profileFile != null
+                                  ? CircleAvatar(
+                                      backgroundImage: FileImage(profileFile!),
+                                      radius: 26,
+                                    )
+                                  : CircleAvatar(
+                                      backgroundImage:
+                                          NetworkImage(community.avatar),
+                                      radius: 26,
+                                    ),
                             ),
                           ),
                         ],

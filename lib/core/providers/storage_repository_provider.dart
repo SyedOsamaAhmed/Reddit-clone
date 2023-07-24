@@ -7,9 +7,11 @@ import 'package:reddit_clone/core/providers/firebase_providers.dart';
 import 'package:reddit_clone/failure.dart';
 import 'package:reddit_clone/typedefs.dart';
 
-final storageRepositoryProvider = Provider((ref) => StorageRepository(
-      firebaseStorage: ref.watch(storageProvider),
-    ));
+final storageRepositoryProvider = Provider(
+  (ref) => StorageRepository(
+    firebaseStorage: ref.watch(storageProvider),
+  ),
+);
 
 class StorageRepository {
   final FirebaseStorage _firebaseStorage;
@@ -27,7 +29,9 @@ class StorageRepository {
       final snapshot = await uploadTask;
       return right(await snapshot.ref.getDownloadURL());
     } catch (e) {
-      return left(Failure(e.toString()));
+      return left(Failure(
+        e.toString(),
+      ));
     }
   }
 }

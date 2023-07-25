@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/auth/controllers/auth_controller.dart';
 import 'package:reddit_clone/home/drawers/communitylist_drawer.dart';
 
+import '../delegates/search_community_delegate.dart';
+
 class Home extends ConsumerWidget {
   const Home({super.key});
 
@@ -24,7 +26,10 @@ class Home extends ConsumerWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showSearch(
+                  context: context, delegate: SeachCommunityDelegate(ref: ref));
+            },
             icon: const Icon(Icons.search),
           ),
           IconButton(

@@ -71,7 +71,7 @@ class CommunityRepository {
         .where(
           'name',
           //if query is empty we dont want to show all results we return 0
-          isLessThanOrEqualTo: query.isEmpty ? 0 : query,
+          isGreaterThanOrEqualTo: query.isEmpty ? 0 : query,
 
           //if query is empty the substring function give -1 error
           isLessThan: query.isEmpty

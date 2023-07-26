@@ -49,4 +49,8 @@ class AuthCController extends StateNotifier<bool> {
           _ref.read(userProvider.notifier).update((state) => userModel),
     );
   }
+
+  void logOut() async {
+    _authrepo.logOut();
+  }
 }

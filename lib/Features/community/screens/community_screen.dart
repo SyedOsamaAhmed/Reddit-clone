@@ -6,6 +6,8 @@ import 'package:reddit_clone/common/error_text.dart';
 import 'package:reddit_clone/common/loader.dart';
 import 'package:routemaster/routemaster.dart';
 
+import '../../../models/community.dart';
+
 class CommunityScreen extends ConsumerWidget {
   final String name;
   const CommunityScreen({
@@ -15,6 +17,12 @@ class CommunityScreen extends ConsumerWidget {
 
   void navigateToModTools(BuildContext context) {
     Routemaster.of(context).push('/mod-tools/$name');
+  }
+
+  void joinCommunity(WidgetRef ref, Community community, BuildContext context) {
+    ref
+        .read(communityControllerProvider.notifier)
+        .joinCommunity(community, context);
   }
 
   @override
@@ -88,8 +96,12 @@ class CommunityScreen extends ConsumerWidget {
                                               BorderRadius.circular(20),
                                         ),
                                       ),
-                                      onPressed: () {},
-                                      child: const Text('Join'),
+                                      onPressed: () => joinCommunity(
+                                          ref, community, context),
+                                      child: Text(
+                                          community.members.contains(user.uid)
+                                              ? 'joined'
+                                              : 'join'),
                                     ),
                             ],
                           ),

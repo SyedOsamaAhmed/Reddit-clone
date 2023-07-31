@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:reddit_clone/Features/auth/controllers/auth_controller.dart';
 import 'package:reddit_clone/Features/community/repository/community_repository.dart';
 
 import 'package:reddit_clone/core/constants.dart';
 import 'package:reddit_clone/core/providers/storage_repository_provider.dart';
 import 'package:reddit_clone/core/utils.dart';
+import 'package:reddit_clone/failure.dart';
 import 'package:reddit_clone/models/community.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -69,6 +71,25 @@ class CommunityController extends StateNotifier<bool> {
     res.fold((l) => showSnackBar(context, l.errorMessage), (r) {
       showSnackBar(context, 'Community created successfully');
       Routemaster.of(context).pop();
+    });
+  }
+
+  void joinCommunity(Community community, BuildContext context) async {
+    final user = _ref.read(userProvider)!;
+    final Either<Failure, void> res;
+
+    if (community.members.contains(user.uid)) {
+      res = await _communityRepository.leaveCommunity(community.name, user.uid);
+    } else {
+      res = await _communityRepository.joinCommunity(community.name, user.uid);
+    }
+
+    res.fold((l) => showSnackBar(context, l.errorMessage), (r) {
+      if (community.members.contains(user.uid)) {
+        showSnackBar(context, 'You have successfully leave a community!');
+      } else {
+        showSnackBar(context, 'You have successfully joined a community!');
+      }
     });
   }
 

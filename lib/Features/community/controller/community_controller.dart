@@ -13,7 +13,7 @@ import 'package:reddit_clone/failure.dart';
 import 'package:reddit_clone/models/community.dart';
 import 'package:routemaster/routemaster.dart';
 
-final userCommunityProvider = StreamProvider((ref) {
+final userCommunityProvider = StreamProvider.autoDispose((ref) {
   final userController = ref.watch(communityControllerProvider.notifier);
   return userController.getUserCommunities();
 });
@@ -29,13 +29,15 @@ final communityControllerProvider =
   );
 });
 //Since we have to extract name for the community from the stream so we use .family with provider to get name
-final getCommunityNameProvider = StreamProvider.family((ref, String name) {
+final getCommunityNameProvider =
+    StreamProvider.family.autoDispose((ref, String name) {
   return ref
       .watch(communityControllerProvider.notifier)
       .getCommunityByName(name);
 });
 
-final searchCommunityProvider = StreamProvider.family((ref, String query) {
+final searchCommunityProvider =
+    StreamProvider.family.autoDispose((ref, String query) {
   return ref.watch(communityControllerProvider.notifier).searchCommunity(query);
 });
 
@@ -146,5 +148,14 @@ class CommunityController extends StateNotifier<bool> {
 
   Stream<List<Community>> searchCommunity(String query) {
     return _communityRepository.searchCommunity(query);
+  }
+
+  void addMods(
+      String communityName, List<String> uids, BuildContext context) async {
+    final res = await _communityRepository.addMods(communityName, uids);
+    res.fold(
+      (l) => showSnackBar(context, l.errorMessage),
+      (r) => Routemaster.of(context).pop(),
+    );
   }
 }

@@ -4,6 +4,7 @@ import 'package:reddit_clone/Features/community/screens/add_mod_screen.dart';
 import 'package:reddit_clone/Features/community/screens/create_community_screen.dart';
 import 'package:reddit_clone/Features/community/screens/edit_community_screen.dart';
 import 'package:reddit_clone/Features/community/screens/mod_tools_screen.dart';
+import 'package:reddit_clone/Features/user_profiles/screens/edit_profile_screen.dart';
 import 'package:reddit_clone/Features/user_profiles/screens/user_profile_screen.dart';
 import 'package:reddit_clone/home/screens/home.dart';
 import 'package:routemaster/routemaster.dart';
@@ -38,5 +39,8 @@ final loggedIn = RouteMap(routes: {
       ),
   '/u/:uid': (routeData) => MaterialPage(
         child: UserProfileScreen(uid: routeData.pathParameters['uid']!),
+      ),
+  '/edit-profile/:uid': (routeData) => MaterialPage(
+        child: EditProfileScreen(uid: routeData.pathParameters['uid']!),
       ),
 });

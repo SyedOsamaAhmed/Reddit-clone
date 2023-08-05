@@ -36,8 +36,7 @@ final getCommunityNameProvider =
       .getCommunityByName(name);
 });
 
-final searchCommunityProvider =
-    StreamProvider.family.autoDispose((ref, String query) {
+final searchCommunityProvider = StreamProvider.family((ref, String query) {
   return ref.watch(communityControllerProvider.notifier).searchCommunity(query);
 });
 

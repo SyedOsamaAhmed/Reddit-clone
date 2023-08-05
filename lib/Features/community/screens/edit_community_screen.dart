@@ -54,6 +54,7 @@ class _EditCommunityState extends ConsumerState<EditCommunity> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(communityControllerProvider);
+    final currentTheme = ref.watch(themeNotifierProvider);
     return isLoading
         ? const Loader()
         : ref.watch(getCommunityNameProvider(widget.name)).when(
@@ -83,8 +84,8 @@ class _EditCommunityState extends ConsumerState<EditCommunity> {
                                   radius: const Radius.circular(10),
                                   strokeCap: StrokeCap.round,
                                   dashPattern: const [10, 4],
-                                  color: Pallete.darkModeAppTheme.textTheme
-                                      .bodyLarge!.color!,
+                                  color:
+                                      currentTheme.textTheme.bodyLarge!.color!,
                                   child: Container(
                                     width: double.infinity,
                                     height: 150,

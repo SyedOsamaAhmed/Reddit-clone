@@ -69,7 +69,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(userProfileControllerProvider);
-
+    final currentTheme = ref.watch(themeNotifierProvider);
     return ref.watch(getUserDataProvider(widget.uid)).when(
           data: (user) {
             return Scaffold(
@@ -99,8 +99,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                     radius: const Radius.circular(10),
                                     strokeCap: StrokeCap.round,
                                     dashPattern: const [10, 4],
-                                    color: Pallete.darkModeAppTheme.textTheme
-                                        .bodyLarge!.color!,
+                                    color: currentTheme
+                                        .textTheme.bodyLarge!.color!,
                                     child: Container(
                                       width: double.infinity,
                                       height: 150,

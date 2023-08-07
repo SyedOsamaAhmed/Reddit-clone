@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/community/controller/community_controller.dart';
 import 'package:reddit_clone/common/error_text.dart';
 import 'package:reddit_clone/common/loader.dart';
-import 'package:reddit_clone/core/constants.dart';
+
 import 'package:reddit_clone/core/utils.dart';
 import 'package:reddit_clone/models/community.dart';
 import 'package:reddit_clone/theme/pallete.dart';
@@ -27,7 +27,8 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
   final typeController = TextEditingController();
   final descriptionController = TextEditingController();
   final linkController = TextEditingController();
-
+  Community? selectedCommunity;
+  File? bannerFile;
   @override
   void dispose() {
     typeController.dispose();
@@ -41,10 +42,8 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
     final isTypeImage = widget.type == 'image';
     final isTypeText = widget.type == 'text';
     final isTypeLink = widget.type == 'link';
-    File? bannerFile;
+
     final currentTheme = ref.watch(themeNotifierProvider);
-    List<Community> communities = [];
-    Community? selectedCommunity;
 
     void selectBannerImage() async {
       final res = await pickImage();
@@ -143,7 +142,6 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
             ),
             ref.watch(userCommunityProvider).when(
                   data: (data) {
-                    communities = data;
                     if (data.isEmpty) {
                       return const SizedBox(
                         height: 10,

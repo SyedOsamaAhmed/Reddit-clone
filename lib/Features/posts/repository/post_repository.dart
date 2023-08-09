@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:reddit_clone/core/firebase_constants.dart';
 import 'package:reddit_clone/core/providers/firebase_providers.dart';
 import 'package:reddit_clone/failure.dart';
+import 'package:reddit_clone/models/community.dart';
 import 'package:reddit_clone/typedefs.dart';
 
 import '../../../models/post.dart';
@@ -29,6 +30,22 @@ class PostRepository {
         e.toString(),
       ));
     }
+  }
+
+  Stream<List<Post>> fetchUserPosts(List<Community> communities) {
+    return _posts
+        .where('communityName',
+            whereIn: communities.map((e) => e.name).toList())
+        .orderBy(
+          'createdAt',
+          descending: true,
+        )
+        .snapshots()
+        .map((event) => event.docs
+            .map((e) => Post.fromMap(
+                  e.data() as Map<String, dynamic>,
+                ))
+            .toList());
   }
 
   CollectionReference get _posts =>

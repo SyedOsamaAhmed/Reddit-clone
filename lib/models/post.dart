@@ -96,14 +96,14 @@ class Post {
             map['description'] != null ? map['description'] as String : null,
         communityName: map['communityName'] as String,
         communityProfilePic: map['communityProfilePic'] as String,
-        upvotes: List<String>.from((map['upvotes'] as List<String>)),
-        downvotes: List<String>.from((map['downvotes'] as List<String>)),
+        upvotes: List<String>.from((map['upvotes'])),
+        downvotes: List<String>.from((map['downvotes'])),
         commentcount: map['commentcount'] as int,
         username: map['username'] as String,
         uid: map['uid'] as String,
         type: map['type'] as String,
         createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-        award: List<String>.from((map['award'] as List<String>)));
+        award: List<String>.from((map['award'])));
   }
 
   @override

@@ -2,6 +2,8 @@ import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/auth/controllers/auth_controller.dart';
+import 'package:reddit_clone/Features/posts/controller/post_controller.dart';
+import 'package:reddit_clone/core/constants.dart';
 import 'package:reddit_clone/models/post.dart';
 import 'package:reddit_clone/theme/pallete.dart';
 
@@ -12,6 +14,10 @@ class PostCard extends ConsumerWidget {
     super.key,
     required this.post,
   });
+
+  void deletePost(WidgetRef ref, BuildContext context) {
+    ref.read(postControllerProvider.notifier).deletePost(post, context);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -83,7 +89,7 @@ class PostCard extends ConsumerWidget {
                               ),
                               if (post.uid == user.uid)
                                 IconButton(
-                                    onPressed: () {},
+                                    onPressed: () => deletePost(ref, context),
                                     icon: Icon(
                                       Icons.delete,
                                       color: Pallete.redColor,
@@ -110,9 +116,9 @@ class PostCard extends ConsumerWidget {
                               ),
                             ),
                           if (isTypeLink)
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.35,
-                              width: double.infinity,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18.0),
                               child: AnyLinkPreview(
                                 displayDirection:
                                     UIDirection.uiDirectionHorizontal,
@@ -131,7 +137,66 @@ class PostCard extends ConsumerWidget {
                                   style: const TextStyle(color: Colors.grey),
                                 ),
                               ),
-                            )
+                            ),
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Constants.up,
+                                      size: 30,
+                                      color: post.upvotes.contains(user.uid)
+                                          ? Pallete.redColor
+                                          : null,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${post.upvotes.length - post.downvotes.length == 0 ? 'Vote' : {
+                                        post.upvotes.length -
+                                            post.downvotes.length
+                                      }}',
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Constants.down,
+                                      size: 30,
+                                      color: post.downvotes.contains(user.uid)
+                                          ? Pallete.blueColor
+                                          : null,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.comment,
+                                      size: 30,
+                                      color: post.upvotes.contains(user.uid)
+                                          ? Pallete.redColor
+                                          : null,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${post.commentcount == 0 ? 'Comment' : {
+                                        post.commentcount
+                                      }}',
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

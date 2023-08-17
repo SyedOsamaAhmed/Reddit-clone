@@ -2,7 +2,10 @@ import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/Features/auth/controllers/auth_controller.dart';
+import 'package:reddit_clone/Features/community/controller/community_controller.dart';
 import 'package:reddit_clone/Features/posts/controller/post_controller.dart';
+import 'package:reddit_clone/common/error_text.dart';
+import 'package:reddit_clone/common/loader.dart';
 import 'package:reddit_clone/core/constants.dart';
 import 'package:reddit_clone/models/post.dart';
 import 'package:reddit_clone/theme/pallete.dart';
@@ -17,6 +20,14 @@ class PostCard extends ConsumerWidget {
 
   void deletePost(WidgetRef ref, BuildContext context) {
     ref.read(postControllerProvider.notifier).deletePost(post, context);
+  }
+
+  void upvotePost(WidgetRef ref) {
+    ref.read(postControllerProvider.notifier).upvotes(post);
+  }
+
+  void downvotePost(WidgetRef ref) {
+    ref.read(postControllerProvider.notifier).downvotes(post);
   }
 
   @override
@@ -139,11 +150,12 @@ class PostCard extends ConsumerWidget {
                               ),
                             ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () => upvotePost(ref),
                                     icon: Icon(
                                       Constants.up,
                                       size: 30,
@@ -153,16 +165,13 @@ class PostCard extends ConsumerWidget {
                                     ),
                                   ),
                                   Text(
-                                    '${post.upvotes.length - post.downvotes.length == 0 ? 'Vote' : {
-                                        post.upvotes.length -
-                                            post.downvotes.length
-                                      }}',
+                                    '${post.upvotes.length - post.downvotes.length == 0 ? 'Vote' : post.upvotes.length - post.downvotes.length}',
                                     style: const TextStyle(
                                       fontSize: 15,
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () => downvotePost(ref),
                                     icon: Icon(
                                       Constants.down,
                                       size: 30,
@@ -177,12 +186,10 @@ class PostCard extends ConsumerWidget {
                                 children: [
                                   IconButton(
                                     onPressed: () {},
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.comment,
                                       size: 30,
-                                      color: post.upvotes.contains(user.uid)
-                                          ? Pallete.redColor
-                                          : null,
+                                      color: Colors.white,
                                     ),
                                   ),
                                   Text(
@@ -193,6 +200,29 @@ class PostCard extends ConsumerWidget {
                                       fontSize: 15,
                                     ),
                                   ),
+                                  ref
+                                      .watch(getCommunityNameProvider(
+                                          post.communityName))
+                                      .when(
+                                        data: (data) {
+                                          if (data.mods.contains(user.uid)) {
+                                            return IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(
+                                                Icons.admin_panel_settings,
+                                                size: 30,
+                                                color: Colors.white,
+                                              ),
+                                            );
+                                          } else {
+                                            return const SizedBox();
+                                          }
+                                        },
+                                        error: (error, stackTrace) => ErrorText(
+                                          error: error.toString(),
+                                        ),
+                                        loading: () => const Loader(),
+                                      )
                                 ],
                               ),
                             ],

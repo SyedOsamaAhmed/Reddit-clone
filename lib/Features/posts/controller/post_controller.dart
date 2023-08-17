@@ -161,4 +161,14 @@ class PostController extends StateNotifier<bool> {
     res.fold((l) => null,
         (r) => showSnackBar(context, 'Post deleted successfully!'));
   }
+
+  void upvotes(Post post) async {
+    final userId = _ref.read(userProvider)!.uid;
+    _postRepository.upvotes(post, userId);
+  }
+
+  void downvotes(Post post) async {
+    final userId = _ref.read(userProvider)!.uid;
+    _postRepository.downvotes(post, userId);
+  }
 }

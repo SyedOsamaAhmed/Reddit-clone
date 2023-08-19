@@ -11,6 +11,7 @@ import 'package:reddit_clone/core/providers/storage_repository_provider.dart';
 import 'package:reddit_clone/core/utils.dart';
 import 'package:reddit_clone/failure.dart';
 import 'package:reddit_clone/models/community.dart';
+import 'package:reddit_clone/models/post.dart';
 import 'package:routemaster/routemaster.dart';
 
 final userCommunityProvider = StreamProvider.autoDispose((ref) {
@@ -35,9 +36,14 @@ final getCommunityNameProvider =
       .watch(communityControllerProvider.notifier)
       .getCommunityByName(name);
 });
-
+//search community provider:
 final searchCommunityProvider = StreamProvider.family((ref, String query) {
   return ref.watch(communityControllerProvider.notifier).searchCommunity(query);
+});
+// show posts on user profile screen:
+final communityPostsProvider = StreamProvider.family((ref, String name) {
+  final postController = ref.watch(communityControllerProvider.notifier);
+  return postController.getCommunityPosts(name);
 });
 
 class CommunityController extends StateNotifier<bool> {
@@ -156,5 +162,9 @@ class CommunityController extends StateNotifier<bool> {
       (l) => showSnackBar(context, l.errorMessage),
       (r) => Routemaster.of(context).pop(),
     );
+  }
+
+  Stream<List<Post>> getCommunityPosts(String name) {
+    return _communityRepository.getCommunityPosts(name);
   }
 }

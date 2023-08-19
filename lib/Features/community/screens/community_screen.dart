@@ -4,6 +4,7 @@ import 'package:reddit_clone/Features/auth/controllers/auth_controller.dart';
 import 'package:reddit_clone/Features/community/controller/community_controller.dart';
 import 'package:reddit_clone/common/error_text.dart';
 import 'package:reddit_clone/common/loader.dart';
+import 'package:reddit_clone/common/post_add_card.dart';
 import 'package:routemaster/routemaster.dart';
 
 import '../../../models/community.dart';
@@ -114,7 +115,21 @@ class CommunityScreen extends ConsumerWidget {
                     ),
                   ];
                 },
-                body: const Text('Displaying community posts!'),
+                body: ref.watch(communityPostsProvider(name)).when(
+                      data: (data) {
+                        return ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            final post = data[index];
+                            return PostCard(post: post);
+                          },
+                        );
+                      },
+                      error: (error, stackTrace) => ErrorText(
+                        error: error.toString(),
+                      ),
+                      loading: () => const Loader(),
+                    ),
               ),
               error: (error, stackTrace) => ErrorText(
                 error: error.toString(),

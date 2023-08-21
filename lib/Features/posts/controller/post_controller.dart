@@ -33,6 +33,10 @@ final getPostsbyIdProvider = StreamProvider.family((ref, String postId) {
   final postCotroller = ref.watch(postControllerProvider.notifier);
   return postCotroller.getPostsById(postId);
 });
+final getPostCommentsProvider = StreamProvider.family((ref, String postId) {
+  final postCotroller = ref.watch(postControllerProvider.notifier);
+  return postCotroller.getPostComments(postId);
+});
 
 class PostController extends StateNotifier<bool> {
   final PostRepository _postRepository;
@@ -198,5 +202,9 @@ class PostController extends StateNotifier<bool> {
     );
     final res = await _postRepository.addComments(comment);
     res.fold((l) => showSnackBar(context, l.errorMessage), (r) => null);
+  }
+
+  Stream<List<Comment>> getPostComments(String postId) {
+    return _postRepository.getPostComments(postId);
   }
 }

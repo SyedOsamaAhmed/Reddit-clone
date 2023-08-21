@@ -22,16 +22,20 @@ class CommentCard extends ConsumerWidget {
           radius: 18,
         ),
         Expanded(
-          child: Column(
-            children: [
-              Text(
-                'u/${comment.username} ',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'u/${comment.username} ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Text(comment.text),
-            ],
+                Text(comment.text),
+              ],
+            ),
           ),
         ),
         Row(

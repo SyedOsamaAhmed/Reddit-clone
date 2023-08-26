@@ -94,6 +94,8 @@ class PostCard extends ConsumerWidget {
                                       left: 8,
                                     ),
                                     child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'r/${post.communityName}',
@@ -127,7 +129,8 @@ class PostCard extends ConsumerWidget {
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 18.0),
+                            padding:
+                                const EdgeInsets.only(top: 18.0, bottom: 5.0),
                             child: Text(
                               post.title,
                               style: const TextStyle(
@@ -241,8 +244,36 @@ class PostCard extends ConsumerWidget {
                                           error: error.toString(),
                                         ),
                                         loading: () => const Loader(),
-                                      )
+                                      ),
                                 ],
+                              ),
+                              Expanded(
+                                child: IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                      barrierDismissible: true,
+                                      context: context,
+                                      builder: (context) => Dialog(
+                                        child: GridView.builder(
+                                          padding: const EdgeInsets.all(20.0),
+                                          shrinkWrap: true,
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 4,
+                                          ),
+                                          itemCount: user.awards.length,
+                                          itemBuilder: (context, index) {
+                                            final award = user.awards[index];
+                                            return Image.asset(
+                                                Constants.awards[award]!);
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon:
+                                      const Icon(Icons.card_giftcard_outlined),
+                                ),
                               ),
                             ],
                           ),

@@ -31,6 +31,14 @@ class PostCard extends ConsumerWidget {
     ref.read(postControllerProvider.notifier).downvotes(post);
   }
 
+  void awardPost(WidgetRef ref, String award, BuildContext context) {
+    ref.read(postControllerProvider.notifier).awardPost(
+          post: post,
+          award: award,
+          context: context,
+        );
+  }
+
   void navigateToUser(BuildContext context) {
     Routemaster.of(context).push('/u/${post.uid}');
   }
@@ -128,6 +136,25 @@ class PostCard extends ConsumerWidget {
                                     )),
                             ],
                           ),
+                          if (post.award.isNotEmpty) ...[
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            SizedBox(
+                              height: 25,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: post.award.length,
+                                itemBuilder: (context, index) {
+                                  final award = post.award[index];
+                                  return Image.asset(
+                                    Constants.awards[award]!,
+                                    height: 22,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                           Padding(
                             padding:
                                 const EdgeInsets.only(top: 18.0, bottom: 5.0),
@@ -264,8 +291,12 @@ class PostCard extends ConsumerWidget {
                                           itemCount: user.awards.length,
                                           itemBuilder: (context, index) {
                                             final award = user.awards[index];
-                                            return Image.asset(
-                                                Constants.awards[award]!);
+                                            return GestureDetector(
+                                              onTap: () => awardPost(
+                                                  ref, award, context),
+                                              child: Image.asset(
+                                                  Constants.awards[award]!),
+                                            );
                                           },
                                         ),
                                       ),

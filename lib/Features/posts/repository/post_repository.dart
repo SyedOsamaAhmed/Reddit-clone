@@ -133,8 +133,33 @@ class PostRepository {
         );
   }
 
+  FutureVoid awardPost(Post post, String award, String senderId) async {
+    try {
+      _posts.doc(post.id).update({
+        'award': FieldValue.arrayUnion([award]),
+      });
+      _users.doc(senderId).update({
+        'awards': FieldValue.arrayRemove([award]),
+      });
+
+      return right(_users.doc(post.uid).update({
+        'award': FieldValue.arrayUnion([award]),
+      }));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(
+        Failure(
+          e.toString(),
+        ),
+      );
+    }
+  }
+
   CollectionReference get _posts =>
       _firestore.collection(FirebaseConstants.postsCollection);
   CollectionReference get _comments =>
       _firestore.collection(FirebaseConstants.commentsCollection);
+  CollectionReference get _users =>
+      _firestore.collection(FirebaseConstants.usersCollection);
 }

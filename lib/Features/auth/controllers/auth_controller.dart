@@ -12,7 +12,7 @@ final authControllerProvider =
           ref: ref,
         ));
 
-final authStateChangeProvider = StreamProvider((ref) {
+final authStateChangeProvider = StreamProvider.autoDispose((ref) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.authStateChange;
 });
@@ -38,10 +38,22 @@ class AuthCController extends StateNotifier<bool> {
     return _authrepo.getUsersData(uid);
   }
 
-  void signInWithGoogle(BuildContext context) async {
+  void signInWithGoogle(BuildContext context, bool isFromLogin) async {
     state =
         true; //loading handling using statenotifier thats  why statenotifier provider
-    final user = await _authrepo.signInWithGoogle();
+    final user = await _authrepo.signInWithGoogle(isFromLogin);
+    state = false;
+    user.fold(
+      (l) => showSnackBar(context, l.errorMessage),
+      (userModel) =>
+          _ref.read(userProvider.notifier).update((state) => userModel),
+    );
+  }
+
+  void signInAsGuest(BuildContext context) async {
+    state =
+        true; //loading handling using statenotifier thats  why statenotifier provider
+    final user = await _authrepo.signInGuest();
     state = false;
     user.fold(
       (l) => showSnackBar(context, l.errorMessage),

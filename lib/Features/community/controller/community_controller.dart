@@ -14,7 +14,7 @@ import 'package:reddit_clone/models/community.dart';
 import 'package:reddit_clone/models/post.dart';
 import 'package:routemaster/routemaster.dart';
 
-final userCommunityProvider = StreamProvider.autoDispose((ref) {
+final userCommunityProvider = StreamProvider((ref) {
   final userController = ref.watch(communityControllerProvider.notifier);
   return userController.getUserCommunities();
 });
@@ -30,8 +30,7 @@ final communityControllerProvider =
   );
 });
 //Since we have to extract name for the community from the stream so we use .family with provider to get name
-final getCommunityNameProvider =
-    StreamProvider.family.autoDispose((ref, String name) {
+final getCommunityNameProvider = StreamProvider.family((ref, String name) {
   return ref
       .watch(communityControllerProvider.notifier)
       .getCommunityByName(name);

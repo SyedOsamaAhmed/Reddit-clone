@@ -5,10 +5,13 @@ import 'package:reddit_clone/theme/pallete.dart';
 import 'package:reddit_clone/core/constants.dart';
 
 class SignInButton extends ConsumerWidget {
-  const SignInButton({super.key});
+  final bool isLoginFromGoogle;
+  const SignInButton({super.key, this.isLoginFromGoogle = true});
 
   void signInWithGoogle(WidgetRef ref, BuildContext context) {
-    ref.read(authControllerProvider.notifier).signInWithGoogle(context);
+    ref
+        .read(authControllerProvider.notifier)
+        .signInWithGoogle(context, isLoginFromGoogle);
   }
 
   @override

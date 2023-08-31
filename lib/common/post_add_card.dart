@@ -59,6 +59,7 @@ class PostCard extends ConsumerWidget {
 
     final currentTheme = ref.watch(themeNotifierProvider);
     final user = ref.watch(userProvider)!;
+    final isGuest = !user.isAuthenticated;
     return Column(
       children: [
         Container(
@@ -204,7 +205,8 @@ class PostCard extends ConsumerWidget {
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () => upvotePost(ref),
+                                    onPressed:
+                                        isGuest ? () {} : () => upvotePost(ref),
                                     icon: Icon(
                                       Constants.up,
                                       size: 30,
@@ -220,7 +222,9 @@ class PostCard extends ConsumerWidget {
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () => downvotePost(ref),
+                                    onPressed: isGuest
+                                        ? () {}
+                                        : () => downvotePost(ref),
                                     icon: Icon(
                                       Constants.down,
                                       size: 30,
@@ -276,32 +280,36 @@ class PostCard extends ConsumerWidget {
                               ),
                               Expanded(
                                 child: IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      barrierDismissible: true,
-                                      context: context,
-                                      builder: (context) => Dialog(
-                                        child: GridView.builder(
-                                          padding: const EdgeInsets.all(20.0),
-                                          shrinkWrap: true,
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 4,
-                                          ),
-                                          itemCount: user.awards.length,
-                                          itemBuilder: (context, index) {
-                                            final award = user.awards[index];
-                                            return GestureDetector(
-                                              onTap: () => awardPost(
-                                                  ref, award, context),
-                                              child: Image.asset(
-                                                  Constants.awards[award]!),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  },
+                                  onPressed: isGuest
+                                      ? () {}
+                                      : () {
+                                          showDialog(
+                                            barrierDismissible: true,
+                                            context: context,
+                                            builder: (context) => Dialog(
+                                              child: GridView.builder(
+                                                padding:
+                                                    const EdgeInsets.all(20.0),
+                                                shrinkWrap: true,
+                                                gridDelegate:
+                                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 4,
+                                                ),
+                                                itemCount: user.awards.length,
+                                                itemBuilder: (context, index) {
+                                                  final award =
+                                                      user.awards[index];
+                                                  return GestureDetector(
+                                                    onTap: () => awardPost(
+                                                        ref, award, context),
+                                                    child: Image.asset(Constants
+                                                        .awards[award]!),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        },
                                   icon:
                                       const Icon(Icons.card_giftcard_outlined),
                                 ),

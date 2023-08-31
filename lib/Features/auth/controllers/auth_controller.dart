@@ -12,7 +12,7 @@ final authControllerProvider =
           ref: ref,
         ));
 
-final authStateChangeProvider = StreamProvider.autoDispose((ref) {
+final authStateChangeProvider = StreamProvider((ref) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.authStateChange;
 });

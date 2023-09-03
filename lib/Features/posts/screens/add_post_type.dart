@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reddit_clone/Features/auth/controllers/auth_controller.dart';
 import 'package:reddit_clone/Features/community/controller/community_controller.dart';
 import 'package:reddit_clone/Features/posts/controller/post_controller.dart';
 import 'package:reddit_clone/common/error_text.dart';
@@ -30,6 +31,7 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
   final linkController = TextEditingController();
   Community? selectedCommunity;
   File? bannerFile;
+
   List<Community> communites = [];
 
   @override
@@ -78,6 +80,7 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
     final isTypeLink = widget.type == 'link';
 
     final currentTheme = ref.watch(themeNotifierProvider);
+    final user = ref.watch(userProvider)!;
     final isLoading = ref.watch(postControllerProvider);
 
     void selectBannerImage() async {
@@ -179,7 +182,7 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
                       alignment: Alignment.topLeft,
                       child: Text('Select Community'),
                     ),
-                    ref.watch(userCommunityProvider).when(
+                    ref.watch(userCommunityProvider(user.uid)).when(
                           data: (data) {
                             communites = data;
                             if (data.isEmpty) {

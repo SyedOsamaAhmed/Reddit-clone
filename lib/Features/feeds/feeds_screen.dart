@@ -16,7 +16,7 @@ class FeedScreen extends ConsumerWidget {
     final user = ref.watch(userProvider)!;
     final isGuest = !user.isAuthenticated;
     if (!isGuest) {
-      return ref.watch(userCommunityProvider).when(
+      return ref.watch(userCommunityProvider(user.uid)).when(
             data: (communities) {
               return ref.watch(userPostsProvider(communities)).when(
                     data: (data) => ListView.builder(

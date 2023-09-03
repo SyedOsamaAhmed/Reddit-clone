@@ -26,7 +26,7 @@ final postControllerProvider =
 });
 
 final userPostsProvider =
-    StreamProvider.family((ref, List<Community> communities) {
+    StreamProvider.family.autoDispose((ref, List<Community> communities) {
   final postController = ref.watch(postControllerProvider.notifier);
   return postController.fetchUserPosts(communities);
 });

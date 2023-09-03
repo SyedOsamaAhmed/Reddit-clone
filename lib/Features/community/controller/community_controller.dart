@@ -14,9 +14,10 @@ import 'package:reddit_clone/models/community.dart';
 import 'package:reddit_clone/models/post.dart';
 import 'package:routemaster/routemaster.dart';
 
-final userCommunityProvider = StreamProvider((ref) {
+final userCommunityProvider =
+    StreamProvider.family.autoDispose((ref, String uid) {
   final userController = ref.watch(communityControllerProvider.notifier);
-  return userController.getUserCommunities();
+  return userController.getUserCommunities(uid);
 });
 
 final communityControllerProvider =
@@ -99,9 +100,7 @@ class CommunityController extends StateNotifier<bool> {
     });
   }
 
-  Stream<List<Community>> getUserCommunities() {
-    final uid = _ref.read(userProvider)!.uid;
-
+  Stream<List<Community>> getUserCommunities(String uid) {
     return _communityRepository.getUserCommunities(uid);
   }
 
